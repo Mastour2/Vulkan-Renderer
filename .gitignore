@@ -1,0 +1,36 @@
+# --- CMake ---
+build/
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+
+
+# --- SDL3 / Dependencies ---
+# If you ever download or vendor deps locally
+bin/
+lib/
+
+# --- Editors ---
+# Zed / VS Code / CLion
+.zed/
+.vscode/
+.idea/
+*.swp
+*.swo
+.cache
+
+
+# --- OS Specific ---
+.DS_Store
+Thumbs.db
+
+# --- Executables ---
+# Ignore the final binary if it ends up in the root
+App
+*.exe
+*.out
+*.app
