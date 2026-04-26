@@ -13,9 +13,9 @@ extern const char* validation_layers[];
 extern const uint32_t validation_layers_count;
 
 #ifdef NDEBUG
-#define ENABLE_VALIDATION false
+    #define ENABLE_VALIDATION false
 #else
-#define ENABLE_VALIDATION true
+    #define ENABLE_VALIDATION true
 #endif
 
 //  Queue families
@@ -55,6 +55,9 @@ typedef struct {
     uint32_t swap_chain_image_count;
     VkFormat swap_chain_image_format;
     VkExtent2D swap_chain_extent;
+
+    VkImageView* swap_chain_image_views;
+    uint32_t swap_chain_image_view_count;
 } VulkanContext;
 
 // Global context (defined in main.c)

@@ -131,8 +131,61 @@ void vk_create_swap_chain(void) {
     vk_free_swap_chain_support(&sc);
 }
 
+//  Create image views
+void vk_create_image_views(void) {
+    vk.swap_chain_image_views = malloc(sizeof(VkImageView) * vk.swap_chain_image_count);
+    if (!vk.swap_chain_image_views) {
+        SDL_Log("[Vulkan] Failed to allocate image views!");
+        return;
+    }
+
+    vk.swap_chain_image_view_count = 0;
+
+    for (uint32_t i = 0; i < vk.swap_chain_image_count; i++) {
+        VkImageViewCreateInfo ci = {
+            .sType    = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+            .image    = vk.swap_chain_images[i],
+            .viewType = VK_IMAGE_VIEW_TYPE_2D,
+            .format   = vk.swap_chain_image_format,
+            .components = {
+                .r = VK_COMPONENT_SWIZZLE_IDENTITY,
+                .g = VK_COMPONENT_SWIZZLE_IDENTITY,
+                .b = VK_COMPONENT_SWIZZLE_IDENTITY,
+                .a = VK_COMPONENT_SWIZZLE_IDENTITY,
+            },
+            .subresourceRange = {
+                .aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT,
+                .baseMipLevel   = 0,
+                .levelCount     = 1,
+                .baseArrayLayer = 0,
+                .layerCount     = 1,
+            },
+        };
+
+        if (vkCreateImageView(vk.device, &ci, NULL, &vk.swap_chain_image_views[i]) != VK_SUCCESS) {
+            SDL_Log("[Vulkan] Failed to create image view %u!", i);
+            // destroy successfully created views before returning
+            for (uint32_t j = 0; j < i; j++)
+                vkDestroyImageView(vk.device, vk.swap_chain_image_views[j], NULL);
+            free(vk.swap_chain_image_views);
+            vk.swap_chain_image_views = NULL;
+            return;
+        }
+
+        vk.swap_chain_image_view_count++;
+    }
+
+    SDL_Log("[Vulkan] Image views created (%u).", vk.swap_chain_image_view_count);
+}
+
 //  Destroy swap chain
 void vk_destroy_swap_chain(void) {
+    for (uint32_t i = 0; i < vk.swap_chain_image_view_count; i++)
+        vkDestroyImageView(vk.device, vk.swap_chain_image_views[i], NULL);
+    free(vk.swap_chain_image_views);
+    vk.swap_chain_image_views = NULL;
+    vk.swap_chain_image_view_count = 0;
+
     if (vk.swap_chain != VK_NULL_HANDLE) {
         vkDestroySwapchainKHR(vk.device, vk.swap_chain, NULL);
         vk.swap_chain = VK_NULL_HANDLE;

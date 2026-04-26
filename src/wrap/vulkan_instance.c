@@ -56,9 +56,10 @@ for (uint32_t i = 0; i < sdl_count && s_extension_count < MAX_EXTENSIONS; i++)
 if (ENABLE_VALIDATION && s_extension_count < MAX_EXTENSIONS)
     s_extensions[s_extension_count++] = VK_EXT_DEBUG_UTILS_EXTENSION_NAME;
 
-#ifdef APPLE
-if (s_extension_count < MAX_EXTENSIONS)
-s_extensions[s_extension_count++] = VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME;
+#ifdef __APPLE__
+    if (s_extension_count < MAX_EXTENSIONS) {
+        s_extensions[s_extension_count++] = VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME;
+    }
 #endif
 
 *out_count = s_extension_count;
@@ -123,7 +124,9 @@ VkInstanceCreateInfo ci = {
     .pApplicationInfo        = &app_info,
     .enabledExtensionCount   = ext_count,
     .ppEnabledExtensionNames = exts,
-    .flags                   = VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR,
+    #ifdef __APPLE__
+        .flags  = VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR,
+    #endif
 };
 
 if (ENABLE_VALIDATION) {

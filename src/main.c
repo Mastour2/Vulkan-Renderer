@@ -12,6 +12,8 @@
 
 VulkanContext vk = {0};
 
+void vk_create_graphics_pipeline() {}
+
 static void init_window(void) {
     SDL_Init(SDL_INIT_VIDEO);
     vk.window = SDL_CreateWindow("Vulkan", W, H, SDL_WINDOW_VULKAN);
@@ -31,6 +33,7 @@ static void init(void) {
     vk_pick_physical_device();
     vk_create_logical_device();
     vk_create_swap_chain();
+    vk_create_image_views();
 }
 
 

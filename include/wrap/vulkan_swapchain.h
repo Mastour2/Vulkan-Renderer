@@ -16,3 +16,5 @@ VkExtent2D vk_choose_swap_extent(const VkSurfaceCapabilitiesKHR* caps);
 void vk_create_swap_chain(void);
 
 void vk_destroy_swap_chain(void);
+
+void vk_create_image_views(void);
