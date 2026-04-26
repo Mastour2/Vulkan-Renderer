@@ -16,7 +16,13 @@ find_package(SDL3 REQUIRED)
 find_package(PkgConfig REQUIRED)
 
 pkg_check_modules(CGLM REQUIRED IMPORTED_TARGET cglm)
-add_executable(App src/main.c)
+
+add_executable(App
+    src/main.c
+    src/wrap/vulkan_instance.c
+    src/wrap/vulkan_device.c
+    src/wrap/vulkan_swapchain.c
+)
 
 target_include_directories(App PRIVATE include)
 
